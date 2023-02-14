@@ -1,3 +1,0 @@
-git remote add origin <link to repo> - инициирует репозиторий на GitHub (связывает origin(имя) c <link to repo>);
-git branch -M main создаёт ветку main на удалённом репозитории;
-git push origin main - отправляет файлы с локального репозитория на удалённый репозиторий на GitHub (<local>=><origin>) в ветку main;

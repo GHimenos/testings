@@ -1,8 +1,0 @@
-git init
-git remote add origin https://github.com/chandra/repo.git
-git fetch --all
-git remote -v
-origin  https://github.com/GHimenos/testings.git (fetch)
-origin  https://github.com/GHimenos/testings.git (push)
-git fetch --all
-git pull origin master
