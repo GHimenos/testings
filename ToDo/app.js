@@ -9,6 +9,9 @@ let todosArr =[];
 let newAdded = false;
 
 renderTodos();
+displayTodos(todosArr);
+
+//*модуль/метод==============================================
 
 function formSerializer(event) {
   event.preventDefault();
@@ -18,8 +21,11 @@ function formSerializer(event) {
   newAdded = true;
   console.log(newAdded);//*проверка
   renderTodos();
+  displayTodos(todosArr);
   task.reset();
 }
+
+//*модуль/метод==============================================
 
 function renderTodos(){
 
@@ -39,4 +45,32 @@ function renderTodos(){
         console.log(todosArr);//*проверка
     }
 
+}
+
+//*модуль/метод==============================================
+
+function displayTodos(arr){
+
+    let printItems = document.querySelector('.js_printItems');
+    printItems.innerHTML='';
+
+    arr.forEach(item=>{
+
+        printItems.insertAdjacentHTML('afterbegin', `
+        <div class = 'taskCard'>
+        <p>${item.title}</p>
+        <p>${item.description}</p>
+        <button>Delete</button>
+        </div>
+        `);
+    });
+
+}
+
+//*модуль/метод==============================================
+
+function deleteTodo(){
+    let printed = document.querySelector('.js_printItems');
+    console.log(printed); //*проверка
+    
 }
