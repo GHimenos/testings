@@ -1,17 +1,13 @@
-//Todo Хард-код - если таких штук много - можно обойти циклом
-
 const task = document.querySelector("#task-content");
 task.addEventListener("submit", formSerializer);
+let printItems = document.querySelector(".js_printItems");
+let delAll = document.querySelector(".reset");
+delAll.addEventListener("click", delTodos);
 
-//Todo ===Конец===Хард-код===================================
-
-let todosArr =[];
+let todosArr = [];
 let newAdded = false;
 
 renderTodos();
-displayTodos(todosArr);
-
-//*модуль/метод==============================================
 
 function formSerializer(event) {
   event.preventDefault();
@@ -19,58 +15,86 @@ function formSerializer(event) {
   let output = Object.fromEntries(input);
   todosArr.push(output);
   newAdded = true;
-  console.log(newAdded);//*проверка
   renderTodos();
-  displayTodos(todosArr);
   task.reset();
 }
 
-//*модуль/метод==============================================
+function renderTodos() {
+  printItems.innerHTML = "";
+  if (newAdded) {
+    localStorage.clear();
+    localStorage.setItem("todos", JSON.stringify(todosArr));
+    todosArr = JSON.parse(localStorage.getItem("todos"));
+    displayTodos(todosArr);
+  } else {
+    let newArr = JSON.parse(localStorage.getItem("todos"));
+    !newArr ? (todosArr = []) : (todosArr = newArr);
+    displayTodos(todosArr);
+  }
 
-function renderTodos(){
+  let tasks = document.querySelectorAll(".taskCard");
+  let doneMarker = document.querySelectorAll(".js_doneTodo");
 
-    if(newAdded){
-
-        console.log('works with true value');//*проверка
-        console.log(todosArr);//*проверка
-        localStorage.clear();
-        localStorage.setItem('todos', JSON.stringify(todosArr));
-        todosArr= JSON.parse(localStorage.getItem('todos'));
-        console.log(todosArr);//*проверка
-    }
-    else{
-        console.log('works with false value');//*проверка
-        let newArr= JSON.parse(localStorage.getItem('todos'));
-        !newArr ? todosArr=[] : todosArr=newArr;
-        console.log(todosArr);//*проверка
-    }
-
-}
-
-//*модуль/метод==============================================
-
-function displayTodos(arr){
-
-    let printItems = document.querySelector('.js_printItems');
-    printItems.innerHTML='';
-
-    arr.forEach(item=>{
-
-        printItems.insertAdjacentHTML('afterbegin', `
-        <div class = 'taskCard'>
-        <p>${item.title}</p>
-        <p>${item.description}</p>
-        <button>Delete</button>
-        </div>
-        `);
+  if (tasks.length !== 0) {
+    tasks.forEach((item) => {
+      item.addEventListener("submit", deleteTodos);
     });
 
+    doneMarker.forEach((item) => {
+      item.addEventListener("change", markDone);
+    });
+  }
 }
 
-//*модуль/метод==============================================
+function displayTodos(arr) {
+  arr.forEach((item) => {
+    printItems.insertAdjacentHTML(
+      "afterbegin",
+      `
+          <form action="#" class = 'taskCard'>
+          <p>${item.title}</p>
+          <p>${item.description}</p>
+          <span>
+          <input name = "doneStatus" class = "js_doneTodo" type="checkbox">
+          <label for "doneStatus">Closed</label>
+          </span>
+          <input class = "js_delTodo" type="submit" value="Delete">
+          </form>
+      `
+    );
+  });
+}
 
-function deleteTodo(){
-    let printed = document.querySelector('.js_printItems');
-    console.log(printed); //*проверка
-    
+function delTodos(event) {
+  event.preventDefault();
+  todosArr = [];
+  localStorage.clear();
+  renderTodos();
+}
+
+function markDone(event) {
+  event.preventDefault();
+  if (this.checked === true) {
+    console.log("checked");
+  } else {
+    console.log("unchecked");
+  }
+}
+
+function deleteTodos(event) {
+  event.preventDefault();
+  localStorage.clear();
+  this.remove();
+  let updatedTodos = document.querySelectorAll(".taskCard");
+  todosArr = [];
+  updatedTodos.forEach((item) => {
+    todosArr.push({
+      title: `${item.children[0].innerText}`,
+      description: `${item.children[1].innerText}`,
+    });
+  });
+  todosArr.reverse();
+  localStorage.setItem("todos", JSON.stringify(todosArr));
+  todosArr = JSON.parse(localStorage.getItem("todos"));
+  renderTodos();
 }
