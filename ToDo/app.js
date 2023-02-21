@@ -13,6 +13,7 @@ function formSerializer(event) {
   event.preventDefault();
   let input = new FormData(this);
   let output = Object.fromEntries(input);
+  output.checked = "";
   todosArr.push(output);
   newAdded = true;
   renderTodos();
@@ -22,9 +23,7 @@ function formSerializer(event) {
 function renderTodos() {
   printItems.innerHTML = "";
   if (newAdded) {
-    localStorage.clear();
-    localStorage.setItem("todos", JSON.stringify(todosArr));
-    todosArr = JSON.parse(localStorage.getItem("todos"));
+    storageReset();
     displayTodos(todosArr);
   } else {
     let newArr = JSON.parse(localStorage.getItem("todos"));
@@ -52,12 +51,9 @@ function displayTodos(arr) {
       "afterbegin",
       `
           <form action="#" class = 'taskCard'>
-          <p>${item.title}</p>
-          <p>${item.description}</p>
-          <span>
-          <input name = "doneStatus" class = "js_doneTodo" type="checkbox">
-          <label for "doneStatus">Closed</label>
-          </span>
+          <p>${item.title}</p> <br>
+          <p>${item.description}</p><br> 
+          <input name = "doneStatus" class = "js_doneTodo" type="checkbox" ${item.checked}> <span>Closed</span> <br>
           <input class = "js_delTodo" type="submit" value="Delete">
           </form>
       `
@@ -74,27 +70,38 @@ function delTodos(event) {
 
 function markDone(event) {
   event.preventDefault();
-  if (this.checked === true) {
-    console.log("checked");
-  } else {
-    console.log("unchecked");
-  }
+  updateTodos();
+  storageReset();
+  renderTodos();  
 }
 
 function deleteTodos(event) {
   event.preventDefault();
-  localStorage.clear();
   this.remove();
+  updateTodos();
+  storageReset();
+  renderTodos();
+}
+
+function storageReset() {
+  localStorage.clear();
+  localStorage.setItem("todos", JSON.stringify(todosArr));
+  todosArr = JSON.parse(localStorage.getItem("todos"));
+}
+
+function updateTodos(){
   let updatedTodos = document.querySelectorAll(".taskCard");
   todosArr = [];
   updatedTodos.forEach((item) => {
+    let checkStatus = false;
+    if (item.children[4].checked === true) {
+      checkStatus = "checked";
+    }
     todosArr.push({
       title: `${item.children[0].innerText}`,
       description: `${item.children[1].innerText}`,
+      checked: `${checkStatus}`
     });
   });
-  todosArr.reverse();
-  localStorage.setItem("todos", JSON.stringify(todosArr));
-  todosArr = JSON.parse(localStorage.getItem("todos"));
-  renderTodos();
+  todosArr.reverse();  
 }

@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 
-form{
+#task-content{
     display: flex;
     flex-flow: column;
     min-width: 30%;
@@ -42,8 +42,6 @@ form{
 }
 
 .taskCard{
-    display: flex;
-    flex-flow: column;
     width: 30%;
 
 }
