@@ -1,15 +1,40 @@
 const task = document.querySelector("#task-content");
-task.addEventListener("submit", formSerializer);
+task.addEventListener("submit", createTodo);
 let printItems = document.querySelector(".js_printItems");
 let delAll = document.querySelector(".reset");
-delAll.addEventListener("click", delTodos);
+delAll.addEventListener("click", delAllTodos);
 
 let todosArr = [];
 let newAdded = false;
 
 renderTodos();
 
-function formSerializer(event) {
+function renderTodos() {
+  printItems.innerHTML = "";
+  if (newAdded) {
+    storageReset();
+    readTodos(todosArr);
+  } else {
+    let newArr = JSON.parse(localStorage.getItem("todos"));
+    !newArr ? (todosArr = []) : (todosArr = newArr);
+    readTodos(todosArr);
+  }
+
+  let tasks = document.querySelectorAll(".taskCard");
+  let doneMarker = document.querySelectorAll(".js_doneTodo");
+
+  if (tasks.length !== 0) {
+    tasks.forEach((item) => {
+      item.addEventListener("submit", deleteTodo);
+    });
+
+    doneMarker.forEach((item) => {
+      item.addEventListener("change", markDone);
+    });
+  }
+}
+
+function createTodo(event) {
   event.preventDefault();
   let input = new FormData(this);
   let output = Object.fromEntries(input);
@@ -20,32 +45,7 @@ function formSerializer(event) {
   task.reset();
 }
 
-function renderTodos() {
-  printItems.innerHTML = "";
-  if (newAdded) {
-    storageReset();
-    displayTodos(todosArr);
-  } else {
-    let newArr = JSON.parse(localStorage.getItem("todos"));
-    !newArr ? (todosArr = []) : (todosArr = newArr);
-    displayTodos(todosArr);
-  }
-
-  let tasks = document.querySelectorAll(".taskCard");
-  let doneMarker = document.querySelectorAll(".js_doneTodo");
-
-  if (tasks.length !== 0) {
-    tasks.forEach((item) => {
-      item.addEventListener("submit", deleteTodos);
-    });
-
-    doneMarker.forEach((item) => {
-      item.addEventListener("change", markDone);
-    });
-  }
-}
-
-function displayTodos(arr) {
+function readTodos(arr) {
   arr.forEach((item) => {
     printItems.insertAdjacentHTML(
       "afterbegin",
@@ -59,34 +59,6 @@ function displayTodos(arr) {
       `
     );
   });
-}
-
-function delTodos(event) {
-  event.preventDefault();
-  todosArr = [];
-  localStorage.clear();
-  renderTodos();
-}
-
-function markDone(event) {
-  event.preventDefault();
-  updateTodos();
-  storageReset();
-  renderTodos();  
-}
-
-function deleteTodos(event) {
-  event.preventDefault();
-  this.remove();
-  updateTodos();
-  storageReset();
-  renderTodos();
-}
-
-function storageReset() {
-  localStorage.clear();
-  localStorage.setItem("todos", JSON.stringify(todosArr));
-  todosArr = JSON.parse(localStorage.getItem("todos"));
 }
 
 function updateTodos(){
@@ -104,4 +76,32 @@ function updateTodos(){
     });
   });
   todosArr.reverse();  
+}
+
+function deleteTodo(event) {
+  event.preventDefault();
+  this.remove();
+  updateTodos();
+  storageReset();
+  renderTodos();
+}
+
+function delAllTodos(event) {
+  event.preventDefault();
+  todosArr = [];
+  localStorage.clear();
+  renderTodos();
+}
+
+function markDone(event) {
+  event.preventDefault();
+  updateTodos();
+  storageReset();
+  renderTodos();  
+}
+
+function storageReset() {
+  localStorage.clear();
+  localStorage.setItem("todos", JSON.stringify(todosArr));
+  todosArr = JSON.parse(localStorage.getItem("todos"));
 }
