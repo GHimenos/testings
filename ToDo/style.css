@@ -1,47 +1,28 @@
-*{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+/*
+*===========BEM Legend:=========================================
+
+prefix  | meaning
+=========================
+js_     | JS style ONLY!
+b-      | BEM block
+bw-     | Wrapper
+bc-     | Container
+
+Total structure:
+BEM: prefix-block__elem-modificator
+JS:  free in accordance to appropriate let or const name
+
+*===============================================================
+*/
+
+.b-taskCard{
+    background-color: #ccc;
+    border-radius: 0.625rem;
+    box-shadow: 0 0 0.875rem 0.063rem rgb(0 0 0 / 20%);
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
 }
 
-#task-content{
-    display: flex;
-    flex-flow: column;
-    min-width: 30%;
-}
-
-
-
-.title{
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    width: fit-content;
-    margin: 3rem auto 3rem auto;
-    font-size: 2.5rem;
-    font-weight: 500;
-}
-
-.container-main{
-    width: 1100px;
-    margin: 3rem auto 3rem auto;
-    display: flex;
-    justify-content: space-between;
-}
-
-.buttonblock{
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    padding: 0.7rem 0;
-}
-
-.container_side{
-    display: flex;
-    justify-content: space-around;
-    width:70%;
-    
-}
-
-.taskCard{
-    width: 30%;
-
+.b-taskCard__title{
+    margin-bottom: 0.938rem;
 }

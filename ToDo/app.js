@@ -1,7 +1,7 @@
-const task = document.querySelector("#task-content");
+const task = document.querySelector("#js_taskContent");
 task.addEventListener("submit", createTodo);
-let printItems = document.querySelector(".js_printItems");
-let delAll = document.querySelector(".reset");
+const printItems = document.querySelector(".js_printItems");
+const delAll = document.querySelector(".js_reset");
 delAll.addEventListener("click", delAllTodos);
 
 let todosArr = [];
@@ -20,7 +20,7 @@ function renderTodos() {
     readTodos(todosArr);
   }
 
-  let tasks = document.querySelectorAll(".taskCard");
+  let tasks = document.querySelectorAll(".js_taskCard");
   let doneMarker = document.querySelectorAll(".js_doneTodo");
 
   if (tasks.length !== 0) {
@@ -50,25 +50,28 @@ function readTodos(arr) {
     printItems.insertAdjacentHTML(
       "afterbegin",
       `
-          <form action="#" class = 'taskCard'>
-          <p>${item.title}</p> <br>
-          <p>${item.description}</p><br> 
-          <input name = "doneStatus" class = "js_doneTodo" type="checkbox" ${item.checked}> <span>Closed</span> <br>
-          <input class = "js_delTodo" type="submit" value="Delete">
-          </form>
+      <div class = "col-4">
+        <form action="#" class = "b-taskCard js_taskCard">
+          <p class="fs-5 b-taskCard__title">${item.title}</p> 
+          <p>${item.description}</p><hr> 
+          <input name = "doneStatus" class = "js_doneTodo" type="checkbox" ${item.checked}> <span>Closed</span> <hr>
+          <input class = "btn btn-danger js_delTodo" type="submit" value="Delete">
+        </form>
+      </div>
       `
     );
   });
 }
 
 function updateTodos(){
-  let updatedTodos = document.querySelectorAll(".taskCard");
+  let updatedTodos = document.querySelectorAll(".js_taskCard");
   todosArr = [];
   updatedTodos.forEach((item) => {
     let checkStatus = false;
-    if (item.children[4].checked === true) {
+    if (item.children[3].checked === true) {
       checkStatus = "checked";
     }
+
     todosArr.push({
       title: `${item.children[0].innerText}`,
       description: `${item.children[1].innerText}`,
